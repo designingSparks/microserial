@@ -4,6 +4,32 @@ Designed for communication with a microcontroller in mind, this package takes a 
 
 **Quick start:**
 
+Define and api file as follows:
+
+```python
+BASE_VAL = 0
+
+class Cmd(Enum):
+    READ = BASE_VAL
+    WRITE = auto()
+
+class Param(Enum):
+    DAC1 = BASE_VAL
+    ADC1 = auto()
+
+class DataType(Enum):
+    D_NONE = BASE_VAL
+    D_INT32 = auto()
+    D_STR = auto()
+
+class Api():
+    cmd = Cmd
+    param = Param
+    datatype = DataType
+```
+
+Then use your api and the microserial package to send commands and receive responses as follows:
+
 ```python
 from microserial.microport import MicroPort
 from api import Api
