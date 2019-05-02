@@ -6,12 +6,11 @@ Designed for communication with a microcontroller in mind, this package takes a 
 
 ```python
 from microserial.microport import MicroPort
-from microserial.api import Cmd, Param, DataType
-from microserial.payload import create_payload
+from api import Api
 
-userial = MicroPort('COM14')
-payload = create_payload(Cmd.READ, Param.ADC, DataType.D_NONE)
-userial.write(payload)
+userial = MicroPort('COM14', Api)
+cmd = userial.send_cmd('READ', 'ADC', 'D_NONE')
+print(cmd)
 resp = userial.read_chars()
 print(resp)
 ```

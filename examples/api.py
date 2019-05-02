@@ -23,3 +23,9 @@ class DataType(Enum):
     D_NONE = BASE_VAL
     D_INT32 = auto()
     D_STR = auto()
+
+
+class Api():
+    cmd = Cmd
+    param = Param
+    datatype = DataType

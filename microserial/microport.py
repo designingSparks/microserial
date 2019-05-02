@@ -10,7 +10,8 @@ EOT = b'\x04' #end of transmission
 
 class MicroPort(serial.Serial):
 
-    def __init__(self, port, baud=115200):
+    def __init__(self, port, api, baud=115200):
+        self.api = api
         try:
             print('Connecting to serial port: {}'.format(port))
             super(MicroPort, self).__init__(port, baud, timeout=0.5,parity=serial.PARITY_NONE)
@@ -27,6 +28,34 @@ class MicroPort(serial.Serial):
         self.reset_input_buffer()
         self.reset_output_buffer()
     
+
+    def send_cmd(self, cmd_str, param_str, dformat_str, data_str=None):
+        payload = self._create_payload(cmd_str, param_str, dformat_str, data_str)
+        self.write(payload)
+
+
+    def _create_payload(self, cmd_str, param_str, dformat_str, data_str=None):
+        '''
+        Create payload to be written to the serial port.
+        Order must be the same as in console.c, processCommand()
+
+        data - (optional) must be a string
+        '''
+        #Get the actual Enum member from the strings
+        cmd = self.api.cmd.__members__[cmd_str]
+        param = self.api.param.__members__[param_str]
+        dformat = self.api.datatype.__members__[dformat_str]
+
+        b = bytearray()
+        b.append(cmd.value)
+        b.append(param.value)
+        b.append(dformat.value)
+        if data_str is not None:
+            d = data_str.encode() #convert str to utf8 bytearray
+            b.extend(d)
+        b.append(ord(EOC))
+        return b
+
 
     def read_nchars(self, min_chars, timeout=0.5):
         '''
