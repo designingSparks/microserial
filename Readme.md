@@ -16,7 +16,7 @@ resp = userial.read_chars()
 print(resp)
 ```
 
-For further examples, see ```example.py```.
+For further examples, see the examples directory.
 
 # API structure
 
