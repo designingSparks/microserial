@@ -12,7 +12,7 @@ class MicroPort(serial.Serial):
 
     def __init__(self, port, baud=115200):
         try:
-            print('Attempting to connect to serial port')
+            print('Connecting to serial port: {}'.format(port))
             super(MicroPort, self).__init__(port, baud, timeout=0.5,parity=serial.PARITY_NONE)
         except serial.serialutil.SerialException as err:
             print('Serial port error.')
@@ -65,7 +65,6 @@ class MicroPort(serial.Serial):
         '''
         Reads the serial port until the EOT byte is received.
         '''
-        print('Read until EOT')
         try:
             tstart = time.time()
             data = bytes()
@@ -76,7 +75,7 @@ class MicroPort(serial.Serial):
                     print('Timeout in read_chars_eot')
                     break
 
-            print('Read time: {}'.format(time.time() - tstart))
+            # print('Read time: {}'.format(time.time() - tstart))
             data = data.decode() #Convert to string, e.g. '151\n\x04'
             data_list = data.split(EOC)
 
@@ -91,4 +90,7 @@ class MicroPort(serial.Serial):
 
 
     def flush(self):
+        '''
+        TODO: Implement command to flush uC command buffer.
+        '''
         pass

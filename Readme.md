@@ -2,7 +2,7 @@
 
 Designed for communication with a microcontroller in mind, this package takes a leaf out of the REST API playbook, allowing commands to be sent in a similar fashion to a REST API.
 
-Quick start:
+**Quick start:**
 
 ```python
 from microserial.microport import MicroPort
@@ -15,6 +15,8 @@ userial.write(payload)
 resp = userial.read_chars()
 print(resp)
 ```
+
+For further examples, see ```example.py```.
 
 # API structure
 
@@ -43,16 +45,11 @@ Example microcontroller response
 'Reading ADC\nValue: 1024\n111\nx04'
 What does the API look like?
 
+# Notes on the python serial package.
 
+```Serial.readline()``` is slow and spends a lot of time waiting.
+For this reason, microport.read_chars() uses Serial.read_all(), which immediately gets all characters that are in the buffer. As soon as the EOT byte has been detected, the response is processed.
 
-
-
-# Example usage
-
-# Notes on the serial port
-
-```ser.readline()``` is slow.
-It appears that it spends a lot of time waiting
 See this ref: https://stackoverflow.com/questions/47235381/python-serial-read-is-extremely-slow-how-to-speed-up
 
 
