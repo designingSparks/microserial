@@ -4,7 +4,7 @@ Designed for communication with a microcontroller in mind, this package takes a 
 
 **Quick start:**
 
-Define and api file as follows:
+Define an api.py file as follows:
 
 ```python
 BASE_VAL = 0
@@ -15,7 +15,7 @@ class Cmd(Enum):
 
 class Param(Enum):
     DAC1 = BASE_VAL
-    ADC1 = auto()
+    ADC = auto()
 
 class DataType(Enum):
     D_NONE = BASE_VAL
@@ -41,7 +41,7 @@ resp = userial.read_chars()
 print(resp)
 ```
 
-For further examples, see the examples directory.
+For a complete example, see the examples directory.
 
 # API structure
 

@@ -8,9 +8,9 @@ from api import Api
 
 PORT = 'COM14' #change this to suit your system
 
-def example1(mserial):
-    mserial.send_cmd('READ', 'ADC', 'D_NONE')
-    resp = mserial.read_chars()
+def example1(userial):
+    userial.send_cmd('READ', 'ADC', 'D_NONE')
+    resp = userial.read_chars()
     print(resp)
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/examples",
+            "cwd": "${workspaceFolder}/examples", //allows debugging of example1.py
         },
         {
             "name": "Python: Remote Attach",

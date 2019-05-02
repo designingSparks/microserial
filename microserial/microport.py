@@ -122,4 +122,6 @@ class MicroPort(serial.Serial):
         '''
         TODO: Implement command to flush uC command buffer.
         '''
-        pass
+        print('Flushing microport input buffer')
+        self.write(bytearray(EOT))
+        self.reset_input_buffer()
