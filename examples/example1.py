@@ -1,3 +1,7 @@
+#Allow running this example directly from inside the examples directory.
+import sys
+sys.path.insert(0, '../')
+
 from microserial.microport import MicroPort
 from microserial.api import Cmd, Param, DataType
 from microserial.payload import create_payload
