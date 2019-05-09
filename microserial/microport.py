@@ -32,6 +32,7 @@ class MicroPort(serial.Serial):
     def send_cmd(self, cmd_str, param_str, dformat_str, data_str=None):
         payload = self._create_payload(cmd_str, param_str, dformat_str, data_str)
         self.write(payload)
+        return payload
 
 
     def _create_payload(self, cmd_str, param_str, dformat_str, data_str=None):
@@ -92,7 +93,7 @@ class MicroPort(serial.Serial):
 
     def read_chars(self, timeout=0.5):
         '''
-        Reads the serial port until the EOT byte is received.
+        Read characters from the serial port until the EOT byte is received.
         '''
         try:
             tstart = time.time()
@@ -101,7 +102,7 @@ class MicroPort(serial.Serial):
             while EOT not in data: 
                 data += self.read_all()
                 if time.time() - tstart > timeout:
-                    print('Timeout in read_chars_eot')
+                    print('Timeout in read_chars')
                     break
 
             # print('Read time: {}'.format(time.time() - tstart))
@@ -117,6 +118,50 @@ class MicroPort(serial.Serial):
         else: #no exception
             return data_list[:-1] #Return everything except for EOT
 
+
+    def read_stream(self, n, timeout=2):
+        '''
+        After EOT has been received, read n '\n' terminated messages from the serial port.
+        Param:
+        n - number of samples to read.
+        timeout - timeout after the last sample was read.
+        '''
+        tstart = time.time()
+        try:
+            tlast = time.time()
+            data = bytes()
+            num_rx = 0
+
+            while num_rx < n*5:
+                char = self.read() #read a single byte to allow testing
+                if char != b'':
+                    data += char
+                    tlast = time.time()
+                    num_rx += 1
+
+                if data[-5:] == b'011\n\x04': #end of ACK sequence
+                #TODO: Improve the logic
+                    print('ACK sequence detected. Dicarding data:')
+                    print(data)
+                    num_rx = 0
+                    data = bytes()
+                    tlast = time.time()
+
+                if time.time() - tlast > timeout:
+                    print('Timeout in read_stream')
+                    break
+
+        except Exception as ex:
+            template = "An exception of type {0} occurred.  Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
+            return None
+
+        else: #no exception
+            # data = data.decode() #Convert to string, e.g. '151\n\x04'
+            # data_list = data.split(EOC)
+            print(time.time() - tstart)
+            return data
 
     def flush(self):
         '''
